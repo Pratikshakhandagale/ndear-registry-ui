@@ -50,6 +50,7 @@ import { TablesComponent } from './tables/tables.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'signup', component: HomeComponent },
   { path: 'hod-mail', component: InstituteMailComponent },
   { path: 'verification', component: VerificationComponent },
 
