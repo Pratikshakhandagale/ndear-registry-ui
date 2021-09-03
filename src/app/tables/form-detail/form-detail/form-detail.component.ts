@@ -25,7 +25,7 @@ export class FormDetailComponent implements OnInit {
   noteAdded: boolean = false;
   claimId: string;
   entityIdt: string;
-
+  notes;
   approveNoteSchema = {
     "type": "object",
     "title": "Invite",
@@ -123,11 +123,9 @@ export class FormDetailComponent implements OnInit {
 
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   
-    
-    console.log("router",this.router.url)
     // var tab_url = this.router.url
     this.route.params.subscribe(async params => {
-      console.log("-------------------",params)
+
       this.table = (params['table']).toLowerCase()
       this.entity = (params['entity']).charAt(0).toUpperCase() + params['entity'].slice(1);
       this.claimId = params['id']
@@ -149,14 +147,13 @@ export class FormDetailComponent implements OnInit {
       this.claimEntityId = res.entityId
       this.claimEntity = res.entity;
       this.claimData = res;
+ this.notes = res.notes;
       this.generalService.getData("/"+this.claimData.propertyURI).subscribe((res) => {
-        console.log("res",res)
         this.attestationData = res;
         this.removeCommonFields();
         this.generateData()
       })
       this.generalService.getData("/"+this.claimEntity+"/"+this.claimEntityId).subscribe((res) => {
-        console.log("profileData",res)
         this.profileData = res;
         this.profile = true
         // this.removeCommonFields();
@@ -164,7 +161,7 @@ export class FormDetailComponent implements OnInit {
       })
     })
 
-    
+  
     //history.state;
     this.getStudentData();
   }
@@ -177,7 +174,7 @@ export class FormDetailComponent implements OnInit {
       temp_object['value'] = value;
       this.propertyData.push(temp_object);
     }
-    console.log("propertyData",this.propertyData)
+
   }
 
   removeCommonFields() {
@@ -208,9 +205,9 @@ export class FormDetailComponent implements OnInit {
 
     let data = {
       "action": action,
-      "notes": this.note
+      "notes": event.note
   }
-  console.log("data--",data);
+
     var url = "/"+this.entity+"/claims/"+this.claimId+"/attest"
     this.generalService.postData(url, data).subscribe((res) => {
       // alert('success');
@@ -230,15 +227,10 @@ export class FormDetailComponent implements OnInit {
   onConsent() { }
 
   saveNote(event){
-    // localStorage.setItem('note', JSON.stringify(event));
-    console.log('evv',event.note);
     this.note = event.note
     this.noteAdded = true;
   }
 
-  saveComments(event){
-    console.log('evv ',event.comment);
-  }
 
   close(){
     console.log('here')

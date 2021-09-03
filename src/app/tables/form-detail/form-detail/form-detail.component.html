@@ -64,11 +64,15 @@
         <!-- <h6>Attestations </h6> -->
         <div class="card">
             <div class="card-body">
-                <dl class="d-flex">
+                <dl class="d-flex w-100">
                     <dd class="w-70">
-                        <div *ngFor="let item of propertyData">{{item?.title}} : <b>{{item?.value}}</b></div>
+                        <div *ngFor="let item of propertyData">
+                            <span *ngIf="item?.title != 'Notes'">
+                                {{item?.title}} : <b>{{item?.value}}</b>
+                            </span>
+                        </div>
                     </dd>
-                    <dd style="text-align-last: right;" class="float-end">
+                    <dd style="text-align-last: right;" class="float-end w-30">
                         <button style="margin: 8px;" class="btn btn-primary text-end pr-20 fw-bold text-capitalize"
                             (click)="onAttestApproveReject('GRANT_CLAIM',$event)"><i
                                 class="fa fa-check-circle text-success" data-mdb-toggle="tooltip"
@@ -79,19 +83,25 @@
                     </dd>
                 </dl>
 
-                <div class="card" style="background-color: #eef3f399;">
+                
+                <div *ngIf="notes">
+                    <div class="card" style="background-color: #eef3f399;">
+
+                <!-- 
+                    <div *ngFor="let item of propertyData">
+                    <div class="card" style="background-color: #eef3f399;" *ngIf="item?.title == 'Notes'"> -->
 
                     <ul class="nav nav-tabs">
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="#comment" class="nav-link active" data-toggle="tab">Comments</a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
                             <a href="#note" class="nav-link" data-toggle="tab">Notes</a>
                         </li>
 
                     </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="comment">
+                   <!--   <div class="tab-content">
+                       <div class="tab-pane fade show active" id="comment">
                             <div class="px-3">
                                     <json-schema-form [schema]="commentSchema" [layout]="form1" framework="bootstrap-4"
                                         (onSubmit)="saveComments($event)">
@@ -99,19 +109,20 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="note">
-                            <div class="px-3">
+                            <div class="p-3">
                                     <json-schema-form [schema]="approveNoteSchema" [layout]="form"
                                         framework="bootstrap-4" (onSubmit)="saveNote($event)">
                                     </json-schema-form>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
 
-                    <div class="px-3 mb-3">
-                        <h6 class="mb-1">Its my new comments</h6>
-                        <span class="fs-7 text-grey-color">By Mohan g, 30 jun 2020</span>
+                     <!-- multiple note -->
+                    <div class="px-3 my-2" *ngFor="let note of notes">
+                        <h6 class="mb-1">{{note.notes}}</h6>
+                        <span class="fs-7 text-grey-color">By {{note.addedBy}}, {{note.createdAt | date}}</span>
                     </div>
-
+                </div>
                 </div>
             </div>
         </div>
@@ -126,7 +137,7 @@
 
 
 
-    <!-- <div class="card" style="background-color: #f2e39c99;">
+ <div class="card" style="background-color: #eef3f399;">
         <div class="card-body">
             <h5>Add a Note for {{claimData?.requestorName}}</h5>
             <ng-template [ngIf]="noteAdded">
@@ -138,7 +149,7 @@
             </json-schema-form>
         </div>
     </div>
-</div> -->
+</div> 
 
 <!-- deny Modal -->
 <div class="modal right fade" id="deny" tabindex="-1" role="dialog" aria-labelledby="deny">
